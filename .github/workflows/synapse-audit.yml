@@ -1,0 +1,30 @@
+name: SynapseAudit Security Scan
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 0 * * 0' # Weekly
+
+jobs:
+  synapse-audit:
+    name: SynapseAudit Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+      pull-requests: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: SynapseAudit Security Scan
+        uses: digidenone/SynapseAudit@v3
+        with:
+          # Optional: Add API Key to Secrets if using paid features
+          # api-key: ${{ secrets.SYNAPSE_API_KEY }}
+          scan-type: 'all'
+          fail-on-critical: false
